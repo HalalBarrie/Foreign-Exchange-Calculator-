@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { SafeAreaView, StyleSheet, View } from 'react-native';
-import { Provider as PaperProvider, TextInput, Button, Text } from 'react-native-paper';
+import { Provider as PaperProvider, TextInput, Button, Text, DefaultTheme } from 'react-native-paper';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import CurrencySelector from './components/CurrencySelector';
 import RateInput from './components/RateInput';
@@ -8,6 +8,15 @@ import AmountInput from './components/AmountInput';
 import LoginScreen from './components/LoginScreen';
 
 const CURRENCIES = ['USD', 'EUR', 'GBP', 'JPY', 'CNY'];
+
+const theme = {
+  ...DefaultTheme,
+  colors: {
+    ...DefaultTheme.colors,
+    primary: '#4a90e2',
+    accent: '#f1c40f',
+  },
+};
 
 export default function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -63,27 +72,33 @@ export default function App() {
   }
 
   return (
-    <PaperProvider>
+    <PaperProvider theme={theme}>
       <SafeAreaView style={styles.container}>
-        <CurrencySelector
-          currencies={CURRENCIES}
-          selectedCurrency={selectedCurrency}
-          onSelectCurrency={setSelectedCurrency}
-        />
-        <RateInput
-          buyingRate={buyingRate}
-          sellingRate={sellingRate}
-          onBuyingRateChange={setBuyingRate}
-          onSellingRateChange={setSellingRate}
-          onSaveRates={saveRates}
-        />
-        <AmountInput amount={amount} onAmountChange={setAmount} />
-        <Button mode="contained" onPress={handleConvert} style={styles.button}>
-          Convert
-        </Button>
-        {convertedAmount ? (
-          <Text style={styles.result}>{convertedAmount}</Text>
-        ) : null}
+        <View style={styles.card}>
+          <Text style={styles.title}>Currency Converter</Text>
+          <CurrencySelector
+            currencies={CURRENCIES}
+            selectedCurrency={selectedCurrency}
+            onSelectCurrency={setSelectedCurrency}
+          />
+          <RateInput
+            buyingRate={buyingRate}
+            sellingRate={sellingRate}
+            onBuyingRateChange={setBuyingRate}
+            onSellingRateChange={setSellingRate}
+            onSaveRates={saveRates}
+          />
+          <AmountInput amount={amount} onAmountChange={setAmount} />
+          <Button mode="contained" onPress={handleConvert} style={styles.button}>
+            Convert
+          </Button>
+          {convertedAmount ? (
+            <View style={styles.resultContainer}>
+              <Text style={styles.resultLabel}>Converted Amount:</Text>
+              <Text style={styles.result}>{convertedAmount}</Text>
+            </View>
+          ) : null}
+        </View>
       </SafeAreaView>
     </PaperProvider>
   );
@@ -93,15 +108,42 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 16,
-    backgroundColor: '#f5f5f5',
+    backgroundColor: '#f0f4f8',
+  },
+  card: {
+    backgroundColor: '#ffffff',
+    borderRadius: 8,
+    padding: 16,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 3,
+  },
+  title: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    marginBottom: 16,
+    textAlign: 'center',
+    color: '#333',
   },
   button: {
     marginTop: 16,
+    paddingVertical: 8,
+  },
+  resultContainer: {
+    marginTop: 24,
+    alignItems: 'center',
+  },
+  resultLabel: {
+    fontSize: 16,
+    color: '#666',
+    marginBottom: 8,
   },
   result: {
-    marginTop: 16,
-    fontSize: 18,
+    fontSize: 20,
     fontWeight: 'bold',
+    color: '#4a90e2',
     textAlign: 'center',
   },
 });
