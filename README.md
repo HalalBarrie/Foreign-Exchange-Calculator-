@@ -24,7 +24,7 @@ Make sure you have the following installed:
 ### Steps to Install Locally
 1. **Clone the Repository**:
    ```bash
-   git clone https://github.com/<your-username>/Foreign-Exchange-Calculator.git
+   git clone https://github.com/HalalBarrie/Foreign-Exchange-Calculator.git
    ```
 
 2. **Navigate to the Project Directory**:
